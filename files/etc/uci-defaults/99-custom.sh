@@ -17,7 +17,7 @@ if [ ! -f "$SETTINGS_FILE" ]; then
     echo "PPPoE settings file not found. Skipping." >>$LOGFILE
 else
     # 读取pppoe信息($enable_pppoe、$pppoe_account、$pppoe_password)
-    . "$SETTINGS_FILE"
+    。 "$SETTINGS_FILE"
 fi
 
 # 计算网卡数量
@@ -46,9 +46,9 @@ if [ "$count" -eq 1 ]; then
     uci commit network
 elif [ "$count" -gt 1 ]; then
     # 提取第一个接口作为WAN
-    wan_ifname=$(echo "$ifnames" | awk '{print $1}')
+    #wan_ifname=$(echo "$ifnames" | awk '{print $1}')
     # 剩余接口保留给LAN
-    lan_ifnames=$(echo "$ifnames" | cut -d ' ' -f2-)
+    #lan_ifnames=$(echo "$ifnames" | cut -d ' ' -f2-)
     # 设置WAN接口基础配置
     uci set network.wan=interface
     # 提取第一个接口作为WAN
@@ -57,7 +57,7 @@ elif [ "$count" -gt 1 ]; then
     uci set network.wan.proto='dhcp'
     # 设置WAN6绑定网口eth0
     uci set network.wan6=interface
-    uci set network.wan6.device="$wan_ifname"
+    #uci set network.wan6.device="$wan_ifname"
     # 更新LAN接口成员
     # 查找对应设备的section名称
     section=$(uci show network | awk -F '[.=]' '/\.@?device\[\d+\]\.name=.br-lan.$/ {print $2; exit}')
@@ -165,7 +165,7 @@ uci commit
 
 # 设置编译作者信息
 FILE_PATH="/etc/openwrt_release"
-NEW_DESCRIPTION="Packaged by wukongdaily"
+NEW_DESCRIPTION="Packaged by Jala"
 sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "$FILE_PATH"
 
 exit 0
