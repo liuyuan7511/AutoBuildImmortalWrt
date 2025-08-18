@@ -46,7 +46,7 @@ if [ "$count" -eq 1 ]; then
     uci commit network
 elif [ "$count" -gt 1 ]; then
     # 提取第一个接口作为WAN
-    lan_ifname=$(echo "$ifnames" | awk '{print $1}')
+    #wan_ifname=$(echo "$ifnames" | awk '{print $1}')
     # 剩余接口保留给LAN
     #lan_ifnames=$(echo "$ifnames" | cut -d ' ' -f2-)
     # 设置WAN接口基础配置
@@ -60,18 +60,18 @@ elif [ "$count" -gt 1 ]; then
     #uci set network.wan6.device="$wan_ifname"
     # 更新LAN接口成员
     # 查找对应设备的section名称
-    section=$(uci show network | awk -F '[.=]' '/\.@?device\[\d+\]\.name=.br-lan.$/ {print $2; exit}')
-    if [ -z "$section" ]; then
+    #section=$(uci show network | awk -F '[.=]' '/\.@?device\[\d+\]\.name=.br-lan.$/ {print $2; exit}')
+    #if [ -z "$section" ]; then
         echo "error：cannot find device 'br-lan'." >>$LOGFILE
-    else
+    #else
         # 删除原来的ports列表
-        uci -q delete "network.$section.ports"
+    #    uci -q delete "network.$section.ports"
         # 添加新的ports列表
-        for port in $lan_ifnames; do
-            uci add_list "network.$section.ports"="$port"
-        done
-        echo "ports of device 'br-lan' are update." >>$LOGFILE
-    fi
+    #    for port in $lan_ifnames; do
+    #        uci add_list "network.$section.ports"="$port"
+    #    done
+    #    echo "ports of device 'br-lan' are update." >>$LOGFILE
+    #fi
     # LAN口设置静态IP
     uci set network.lan.proto='static'
     # 多网口设备 支持修改为别的管理后台地址 在Github Action 的UI上自行输入即可 
